@@ -12,6 +12,8 @@
 
 ; Based on http://aleph.io/examples/literate.html#aleph.examples.tcp
 
+(defonce ^:private message-queue (atom clojure.lang.PersistentQueue/EMPTY))
+
 (def cli-options
   "CLI options for the broker"
   [["-p" "--port PORT" "Port number"
