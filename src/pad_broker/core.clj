@@ -1,8 +1,9 @@
 (ns pad-broker.core
   (:require
+    [clojure.tools.logging :as log]
+    [clojure.tools.cli :refer [parse-opts]]
     [aleph.tcp :as tcp]
-    [aleph.netty :as netty]
-    [clojure.tools.cli :refer [parse-opts]]))
+    [aleph.netty :as netty]))
 
 (def cli-options
   "CLI options for the broker"
@@ -14,13 +15,13 @@
 
 (defn message-handler
   [s info]
-  (println (str "New connection from " info)))
+  (log/info (str "New connection from " info)))
 
 (defn start-server
   [port]
-  (println (str "Broker is up and listening on :" port))
-  (println "Press Ctrl + C to close the application")
-  (tcp/start-server message-handler {:host host :port port}))
+  (log/info "Broker is up and listening on " port)
+  (log/info "Press Ctrl + C to close the application")
+  (tcp/start-server message-handler {:port port}))
 
 
 (defn -main
