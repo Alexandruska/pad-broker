@@ -7,6 +7,8 @@
     [aleph.netty :as netty]
     [gloss.core :as gloss]))
 
+; Based on http://aleph.io/examples/literate.html#aleph.examples.tcp
+
 (def cli-options
   "CLI options for the broker"
   [["-p" "--port PORT" "Port number"
@@ -27,6 +29,16 @@
    pr-str
    edn/read-string))
 
+(defn wrap-duplex-stream
+  "Wraps given raw TCP duplex stream to send/consume messages using a `gloss` protocol."
+  [protocol s]
+  (let [out (s/stream)]
+    (s/connect
+      (s/map #(io/encode protocol %) out)
+      s)
+    (s/splice
+      out
+      (io/decode-stream s protocol))))
 
 (defn message-handler
   "Handles new message for the broker and dispatches it.
@@ -38,10 +50,13 @@
 (defn start-server
   "Runs tcp server on the given port.
   Doesn't block the main thread."
-  [port]
+  [handler port]
   (log/info "Broker is up and listening on " port)
   (log/info "Press Ctrl + C to close the application")
-  (tcp/start-server message-handler {:port port}))
+  (tcp/start-server
+    (fn [s info]
+      (handler (wrap-duplex-stream broker-protocol s) info))
+    {:port port}))
 
 
 (defn -main
@@ -52,4 +67,4 @@
   (let [{{port :port help? :help} :options :as opts} (parse-opts args cli-options)]
     (if help?
       (println (:summary opts))
-      (netty/wait-for-close (start-server port)))))
+      (netty/wait-for-close (start-server message-handler port)))))
