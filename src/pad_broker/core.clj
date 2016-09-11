@@ -2,6 +2,7 @@
   (:require
     [clojure.tools.logging :as log]
     [clojure.tools.cli :refer [parse-opts]]
+    [schema.core :as schema]
     [clojure.edn :as edn]
     [aleph.tcp :as tcp]
     [aleph.netty :as netty]
@@ -21,6 +22,10 @@
     :parse-fn #(Integer/parseInt %)
     :validate [#(< 0 % 0x10000) "Must be a number between 0 and 65536"]]
    ["-h" "--help"]])
+
+(def broker-message-schema
+  {:type (schema/enum :push :pop)
+   :payload schema/Any})
 
 (def broker-protocol
   "
@@ -45,6 +50,13 @@
       out
       (io/decode-stream s protocol))))
 
+(defn dispatch-message
+  [m]
+  (try
+    (let [msg (schema/validate broker-message-schema m)]
+      msg)
+    (catch Exception e (hash-map :type :response :error? true :message (.getMessage e)))))
+
 (defn message-handler
   "Handles new message for the broker and dispatches it.
   `s` is a duplex stream,
@@ -52,7 +64,7 @@
   [s info]
   (log/info  "New connection from" info)
   (s/connect
-    (s/map list s)
+    (s/map dispatch-message s)
     s))
 
 (defn start-server
