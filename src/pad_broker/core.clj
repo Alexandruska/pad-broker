@@ -16,6 +16,9 @@
 (defn -main
   "Entry point for the broker."
   [& args]
-  (let [{{host :host port :port} :options} (parse-opts args cli-options)]
-    (println (str "Broker is up and running on " host ":" port))
-    (println "Press Ctrl + C to close the application")))
+  (let [{{host :host port :port help? :help} :options :as opts} (parse-opts args cli-options)]
+    (if help?
+      (println (:summary opts))
+      (do
+        (println (str "Broker is up and running on " host ":" port))
+        (println "Press Ctrl + C to close the application")))))
