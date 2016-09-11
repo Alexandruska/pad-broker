@@ -7,7 +7,8 @@
                  [org.clojure/tools.cli "0.3.5"]
                  [org.clojure/tools.logging "0.3.1"]
                  [aleph "0.4.2-alpha8"]
-                 [gloss "0.2.6"]]
+                 [gloss "0.2.6"]
+                 [manifold "0.1.6-alpha1"]]
   :main ^:skip-aot pad-broker.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})

@@ -5,7 +5,9 @@
     [clojure.edn :as edn]
     [aleph.tcp :as tcp]
     [aleph.netty :as netty]
-    [gloss.core :as gloss]))
+    [gloss.core :as gloss]
+    [gloss.io :as io]
+    [manifold.stream :as s]))
 
 ; Based on http://aleph.io/examples/literate.html#aleph.examples.tcp
 
