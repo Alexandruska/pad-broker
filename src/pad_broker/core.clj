@@ -47,7 +47,10 @@
   `s` is a duplex stream,
   `info` is a map with connection info"
   [s info]
-  (log/info (str "New connection from " info)))
+  (log/info  "New connection from" info)
+  (s/connect
+    (s/map list s)
+    s))
 
 (defn start-server
   "Runs tcp server on the given port.
@@ -60,6 +63,12 @@
       (handler (wrap-duplex-stream broker-protocol s) info))
     {:port port}))
 
+(defn client
+  "Opens new connection to the given `host` and `port`.
+  Returns deferred."
+  [host port]
+  (d/chain (tcp/client {:host host, :port port})
+    #(wrap-duplex-stream protocol %)))
 
 (defn -main
   "Entry point for the broker.
