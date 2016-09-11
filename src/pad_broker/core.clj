@@ -10,7 +10,7 @@
     [gloss.io :as io]
     [manifold.stream :as s]
     [manifold.deferred :as d])
-  :gen-class)
+  (:gen-class))
 
 ; Based on http://aleph.io/examples/literate.html#aleph.examples.tcp
 
