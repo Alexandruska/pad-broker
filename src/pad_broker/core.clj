@@ -7,7 +7,8 @@
     [aleph.netty :as netty]
     [gloss.core :as gloss]
     [gloss.io :as io]
-    [manifold.stream :as s]))
+    [manifold.stream :as s]
+    [manifold.deferred :as d]))
 
 ; Based on http://aleph.io/examples/literate.html#aleph.examples.tcp
 
@@ -65,10 +66,12 @@
 
 (defn client
   "Opens new connection to the given `host` and `port`.
-  Returns deferred."
+  Returns deferred.
+
+  Use put! and take! function from manifold.stream to produce/consume messages"
   [host port]
   (d/chain (tcp/client {:host host, :port port})
-    #(wrap-duplex-stream protocol %)))
+    #(wrap-duplex-stream broker-protocol %)))
 
 (defn -main
   "Entry point for the broker.
