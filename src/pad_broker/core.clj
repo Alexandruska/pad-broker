@@ -1,7 +1,21 @@
 (ns pad-broker.core
-  (:gen-class))
+  (require
+    [aleph.tcp :as tcp]
+    [clojure.tools.cli :refer [parse-opts]]))
+
+(def cli-options
+  "CLI options for the broker"
+  [["-p" "--port PORT" "Port number"
+    :default 14141
+    :parse-fn #(Integer/parseInt %)
+    :validate [#(< 0 % 0x10000) "Must be a number between 0 and 65536"]]
+   ["-H" "--host HOSTNAME" "Hostname"
+    :default "localhost"]
+   ["-h" "--help"]])
 
 (defn -main
-  "I don't do a whole lot ... yet."
+  "Entry point for the broker."
   [& args]
-  (println "Hello, World!"))
+  (let [{{host :host port :port} :options} (parse-opts args cli-options)]
+    (println (str "Broker is up and running on " host ":" port))
+    (println "Press Ctrl + C to close the application")))
