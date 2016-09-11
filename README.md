@@ -1,36 +1,24 @@
-# pad-broker
+## PAD labs - Simple Message Broker
 
-FIXME: description
-
-## Installation
-
-Download from http://example.com/FIXME.
+This is a demo of a simple message broker implemented in Clojure.
 
 ## Usage
 
-FIXME: explanation
+The broker can be distributed as a standalone jar:
 
     $ java -jar pad-broker-0.1.0-standalone.jar [args]
 
 ## Options
 
-FIXME: listing of options this app accepts.
+By default the broker listens on the `14141` port. To change that use `-p` or `--port` option.
 
 ## Examples
 
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
+TODO: Add examples.
 
 ## License
 
-Copyright © 2016 FIXME
+Copyright © 2016 Alex Gavrisco
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
