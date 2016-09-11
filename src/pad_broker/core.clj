@@ -1,6 +1,7 @@
 (ns pad-broker.core
-  (require
+  (:require
     [aleph.tcp :as tcp]
+    [aleph.netty :as netty]
     [clojure.tools.cli :refer [parse-opts]]))
 
 (def cli-options
@@ -13,6 +14,10 @@
     :default "localhost"]
    ["-h" "--help"]])
 
+(defn message-handler
+  [s info]
+  (println (str "New connection from " info)))
+
 (defn -main
   "Entry point for the broker."
   [& args]
@@ -21,4 +26,6 @@
       (println (:summary opts))
       (do
         (println (str "Broker is up and running on " host ":" port))
-        (println "Press Ctrl + C to close the application")))))
+        (println "Press Ctrl + C to close the application")
+        (netty/wait-for-close
+          (tcp/start-server message-handler {:host host :port port}))))))
