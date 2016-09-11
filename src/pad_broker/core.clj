@@ -54,7 +54,16 @@
   [m]
   (try
     (let [msg (schema/validate broker-message-schema m)]
-      msg)
+      (log/info "Dispatching the message" m)
+      (case (:type msg)
+        :push (do
+                (swap! message-queue conj (:payload msg))
+                {:type :response :error? false :message "OK"})
+        :pop (if (empty? @message-queue)
+                {:type :response :error? true :message "Empty queue"}
+                (let [payload (peek @message-queue)]
+                  (swap! message-queue pop)
+                  {:type :message :payload payload}))))
     (catch Exception e (hash-map :type :response :error? true :message (.getMessage e)))))
 
 (defn message-handler
