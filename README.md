@@ -2,6 +2,13 @@
 
 This is a demo of a simple message broker implemented in Clojure.
 
+## Prerequisites
+
+- Java is required (JRE)
+- Install [Leiningen](https://leiningen.org/#install)
+Leiningen is a build and dependency management tool for Clojure.
+It's the best tool so far to manage Clojure projects.
+
 ## Usage
 
 The broker can be distributed as a standalone jar:
