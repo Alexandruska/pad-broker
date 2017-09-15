@@ -15,7 +15,7 @@ It's the best tool so far to manage Clojure projects.
 
 - Open project's root folder
 - Run broker - `lein run` (default port is `14141`, to run on custom port, use `-p <PORT>` option) or `lein run -p <port>`
-- Open a REPL (interactive console) using `lein run`
+- Open a REPL (interactive console) using `lein repl`
 - Create a new client using `client` factory
 `(def c (client "localhost" 14141))` (`14141` is the port broker is listening on)
 - Send a message to the broker using created client
